@@ -1,0 +1,68 @@
+/* FormRegister.css */
+
+.register-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  .register-form {
+    background-color: #ffffff;
+    padding: 50px 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 500px;
+    box-sizing: border-box;
+  }
+  
+  .register-form h2 {
+    margin-bottom: 25px;
+    color: #333;
+    text-align: center;
+  }
+  
+  .register-form input,
+  .register-form select {
+    width: 100%;
+    padding: 12px 14px;
+    margin-bottom: 18px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.3s;
+    box-sizing: border-box;
+  }
+  
+  .register-form input:focus,
+  .register-form select:focus {
+    border-color: #4a90e2;
+    outline: none;
+  }
+  
+  .register-form select {
+    background-color: #fff;
+  }
+  
+  .register-form button {
+    width: 95%;
+    padding: 14px;
+    background-color: #4a90e2;
+    color: white;
+    font-size: 16px;
+    border: none;
+    
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    display: block;       /* Thêm dòng này */
+  margin: 0 auto; 
+  margin-top: 15px;
+  }
+  
+  .register-form button:hover {
+    background-color: #357abd;
+  }
+  

@@ -1,0 +1,126 @@
+/* General body styling */
+body {
+    font-family: 'Arial', sans-serif;
+    background-image        : url("../Image/pngtree-beautiful-background-of-high-rise-buildings-picture-image_2148726.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    
+    box-sizing: border-box;
+  }
+ 
+/* Container for the form */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+    padding: 20px;
+  }
+  
+  /* The form itself */
+  .form {
+    position: relative; 
+    padding: 40px 30px;
+    border-radius: 30px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 600px;
+    text-align: center;
+    box-sizing: border-box;
+    overflow: hidden;
+    z-index: 1;
+  }
+  
+  .form::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(3px);
+    z-index: -1;
+  }
+  
+  /* Form heading */
+  .form h2 {
+    margin-bottom: 70px;
+    color: #2c3e50;
+    font-size: 32px;
+    font-weight: bold;
+  }
+  
+  /* Input fields */
+  .input {
+    width: 100%;
+    padding: 22px;
+    margin-bottom: 30px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 18px;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .input:focus {
+    border-color: #2980b9;
+    outline: none;
+    box-shadow: 0 0 8px rgba(41, 128, 185, 0.3);
+  }
+  
+  /* Buttons */
+  .button {
+    width: 95%;
+    padding: 14px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-top: 20px;
+  }
+  
+  .button:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+  }
+  
+  .button:active {
+    background-color: #1c5980;
+    transform: translateY(0);
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 500px) {
+    .form {
+      padding: 40px 20px;
+      margin: 0 15px;
+      max-width: 90%;
+    }
+  
+    .form h2 {
+      font-size: 26px;
+      margin-bottom: 30px;
+    }
+  
+    .input {
+      padding: 18px;
+      font-size: 16px;
+      margin-bottom: 24px;
+    }
+  
+    .button {
+      padding: 16px;
+      font-size: 16px;
+    }
+  }
