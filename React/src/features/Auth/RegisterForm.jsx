@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import "../../Styles/FormRegister.css";
+import { useNavigate } from "react-router-dom";
 
 const RegisterForm = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -11,7 +13,10 @@ const RegisterForm = () => {
     gender: "",
     phone: ""
   });
-
+  const handleLogin= (e) => {
+    e.preventDefault();
+    navigate("/login");
+  };
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -92,7 +97,7 @@ const RegisterForm = () => {
         />
 
         <button type="submit">Đăng ký</button>
-        <button type="submit">Đăng nhập</button>
+        <button onClick={handleLogin} >Đăng nhập</button>
       </form>
     </div>
   );

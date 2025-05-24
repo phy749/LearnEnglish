@@ -144,6 +144,7 @@ const LoginForm = () => {
           disabled={isLoading}
           autoComplete="current-password"
         />
+        <a onClick={handleRegister}>Quên mật khẩu</a>
 
         <button type="submit" className="button" disabled={isLoading}>
           {isLoading ? "Đang xử lý..." : "Đăng nhập"}

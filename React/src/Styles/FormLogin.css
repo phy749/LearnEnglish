@@ -48,7 +48,14 @@ body {
     backdrop-filter: blur(3px);
     z-index: -1;
   }
-  
+  .form a {
+    font-size: 14px;         /* cỡ chữ */
+    color: #333333;          /* màu chữ */
+    margin: 10px 0;          /* khoảng cách trên dưới */
+    line-height: 1.5;        /* chiều cao dòng */
+    font-weight: normal;  
+    cursor: pointer; /* kiểu chữ */
+  }
   /* Form heading */
   .form h2 {
     margin-bottom: 70px;
