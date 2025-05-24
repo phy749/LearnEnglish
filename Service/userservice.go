@@ -6,6 +6,7 @@ import (
 	"github.com/phy749/LearnEnglish/dataoject"
 	"github.com/phy749/LearnEnglish/irepository"
 	"github.com/phy749/LearnEnglish/model"
+	"github.com/phy749/LearnEnglish/utils"
 )
 
 type UserService struct {
@@ -24,11 +25,17 @@ func (s *UserService) GetAllUser() ([]model.Useraccount, error) {
 }
 
 func (s *UserService) CreateUser(req dataoject.User) (model.Useraccount, error) {
+	// Hash password before saving
+	hashedPassword, err := utils.HashPassword(req.Password)
+	if err != nil {
+		return model.Useraccount{}, err
+	}
+
 	user := model.Useraccount{
 		Username:  req.Username,
 		Fullname:  req.Fullname,
 		Email:     req.Email,
-		Password:  req.Password, // Nên mã hóa trước khi lưu
+		Password:  hashedPassword,
 		Birthdate: req.Birthdate,
 		Phone:     req.Phone,
 		Gender:    req.Gender,
@@ -43,18 +50,6 @@ func (s *UserService) DeactivateUser(id int) (model.Useraccount, error) {
 	}
 	n := "N"
 	user.Is_active = &n
-	return s.UserRepo.Update(user)
-}
-
-func (s *UserService) ChangePassword(req dataoject.ChangePasswordRequest, id int) (model.Useraccount, error) {
-	user, err := s.UserRepo.FindByID(int(id))
-	if err != nil {
-		return model.Useraccount{}, err
-	}
-	if req.Password != req.ConfirmPassword {
-		return model.Useraccount{}, errors.New("password confirmation does not match")
-	}
-	user.Password = req.Password // Nên mã hóa trước khi lưu
 	return s.UserRepo.Update(user)
 }
 
