@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "../../Styles/FormLogin.css";
-import { LoginFormRequest } from "../Service/LoginFormRequest";
+import { LoginFormRequest, GoogleLoginRequest } from "../Service/Request";
 import Toast from "../../Components/Toast";
 import { useGoogleLogin } from '@react-oauth/google';
 import { useNavigate } from "react-router-dom";
@@ -86,26 +86,13 @@ const LoginForm = () => {
 
   const handleForgotPassword = (e) => {
     e.preventDefault();
-    navigate("/forgot-password");
+    navigate("/forgotpassword");
   };
 
   const login = useGoogleLogin({
     onSuccess: async (response) => {
       try {
-   
-        const userInfo = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
-          headers: { Authorization: `Bearer ${response.access_token}` },
-        }).then(res => res.json());
-
-        // Lưu thông tin người dùng vào localStorage
-        localStorage.setItem('user', JSON.stringify({
-          email: userInfo.email,
-          name: userInfo.name,
-          picture: userInfo.picture,
-          googleId: userInfo.sub,
-          accessToken: response.access_token
-        }));
-
+        await GoogleLoginRequest(response.access_token);
         showToast("Đăng nhập với Google thành công", "success");
         navigate("/dashboard");
       } catch (error) {
@@ -144,7 +131,7 @@ const LoginForm = () => {
           disabled={isLoading}
           autoComplete="current-password"
         />
-        <a onClick={handleRegister}>Quên mật khẩu</a>
+        <a onClick={handleForgotPassword}>Quên mật khẩu</a>
 
         <button type="submit" className="button" disabled={isLoading}>
           {isLoading ? "Đang xử lý..." : "Đăng nhập"}
@@ -152,9 +139,9 @@ const LoginForm = () => {
         <button onClick={handleRegister} type="button" className="button">
           Đăng ký
         </button>
-        <button onClick={handleForgotPassword} type="button" className="button">
+        {/* <button onClick={handleForgotPassword} type="button" className="button">
           Quên mật khẩu
-        </button>
+        </button> */}
         <button onClick={() => login()} type="button" className="button">
           Đăng nhập với Google
         </button>
