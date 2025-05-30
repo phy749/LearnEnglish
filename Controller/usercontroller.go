@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"log"
 	"net/http"
 	"strconv"
 
@@ -20,6 +21,7 @@ func NewUserController(userService iservice.IUserService) *UserController {
 func (uc *UserController) GetAllUser(c *gin.Context) {
 	users, err := uc.UserService.GetAllUser()
 	if err != nil {
+		log.Printf("Error getting users: %v\n", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}

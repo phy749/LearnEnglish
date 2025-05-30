@@ -1,23 +1,21 @@
 package utils
 
 import (
-	"context"
-	"github.com/redis/go-redis/v9" // hoặc github.com/go-redis/redis/v8 tuỳ phiên bản bạn dùng
 	"time"
+
+	"github.com/phy749/LearnEnglish/config"
 )
 
-// Redis client & context được khởi tạo sẵn ở nơi khác (ví dụ: trong redisdb.go)
-var Client *redis.Client
-var Ctx = context.Background()
+// Dùng Client & Context từ package config
 
 func SaveRefreshToken(userID string, token string, expiration time.Duration) error {
-	return Client.Set(Ctx, "refresh_token:"+userID, token, expiration).Err()
+	return config.Client.Set(config.Ctx, "refresh_token:"+userID, token, expiration).Err()
 }
 
 func GetRefreshToken(userID string) (string, error) {
-	return Client.Get(Ctx, "refresh_token:"+userID).Result()
+	return config.Client.Get(config.Ctx, "refresh_token:"+userID).Result()
 }
 
 func DeleteRefreshToken(userID string) error {
-	return Client.Del(Ctx, "refresh_token:"+userID).Err()
+	return config.Client.Del(config.Ctx, "refresh_token:"+userID).Err()
 }

@@ -5,8 +5,7 @@ import (
 	controller "github.com/phy749/LearnEnglish/Controller"
 )
 
-func SetupRouterAuth(authController *controller.AuthController) *gin.Engine {
-	r := gin.Default()
+func SetupRouterAuth(r *gin.Engine, authController *controller.AuthController) *gin.Engine {
 
 	auth := r.Group("/auth")
 	{

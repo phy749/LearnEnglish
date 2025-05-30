@@ -36,12 +36,15 @@ func (uc *AuthController) Login(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	token, err := uc.AuthService.Login(request)
+	refreshtoken, accesstoken, err := uc.AuthService.Login(request)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"token": token})
+	c.JSON(http.StatusOK, gin.H{
+		"access_token":  accesstoken,
+		"refresh_token": refreshtoken,
+	})
 }
 
 func (uc *AuthController) ChangePassword(c *gin.Context) {
