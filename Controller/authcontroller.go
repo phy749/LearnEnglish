@@ -27,7 +27,10 @@ func (uc *AuthController) Register(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, user)
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Đăng kí thành công",
+		"data":    user,
+	})
 }
 
 func (uc *AuthController) Login(c *gin.Context) {
@@ -41,9 +44,21 @@ func (uc *AuthController) Login(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
+
+	c.SetCookie(
+		"refresh_token",
+		refreshtoken,
+		7*24*60*60, // 7 days
+		"/",
+		"",
+		false,
+		true, // HttpOnly
+	)
+
+	// Return access token in response body
 	c.JSON(http.StatusOK, gin.H{
-		"access_token":  accesstoken,
-		"refresh_token": refreshtoken,
+		"access_token": accesstoken,
+		"message":      "Đăng nhập thành công",
 	})
 }
 
@@ -53,12 +68,12 @@ func (uc *AuthController) ChangePassword(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	token, err := uc.AuthService.ChangePassword(req)
+	message, err := uc.AuthService.ChangePassword(req)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"token": token})
+	c.JSON(http.StatusOK, gin.H{"Message": message})
 }
 
 func (a *AuthController) RefreshToken(c *gin.Context) {
@@ -77,24 +92,10 @@ func (a *AuthController) RefreshToken(c *gin.Context) {
 
 func (a *AuthController) Logout(c *gin.Context) {
 	userID := c.Query("user_id")
-	token, err := a.AuthService.Logout(userID)
+	message, err := a.AuthService.Logout(userID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"token": token})
-}
-
-func (a *AuthController) ForgotPassword(c *gin.Context) {
-	var req dataoject.ForgotPassword
-	if err := c.ShouldBindJSON(&req); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-	token, err := a.AuthService.SendResetLink(req.Email)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-	c.JSON(http.StatusOK, gin.H{"token": token})
+	c.JSON(http.StatusOK, gin.H{"Message": message})
 }

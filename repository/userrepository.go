@@ -39,3 +39,21 @@ func (r *UserRepository) Update(user model.Useraccount) (model.Useraccount, erro
 func (r *UserRepository) Delete(id int) error {
 	return r.DB.Delete(&model.Useraccount{}, id).Error
 }
+
+func (r *UserRepository) FindUserByUsername(username string) (model.Useraccount, error) {
+	var user model.Useraccount
+	err := r.DB.Where("username = ?", username).First(&user).Error
+	if err != nil {
+		return model.Useraccount{}, err
+	}
+	return user, nil
+}
+
+// func (r *UserRepository) FindUserByEmail(email string) (model.Useraccount, error) {
+// 	var user model.Useraccount
+// 	err := r.DB.Where("email = ?", email).First(&user).Error
+// 	if err != nil {
+// 		return model.Useraccount{}, err
+// 	}
+// 	return user, nil
+// }

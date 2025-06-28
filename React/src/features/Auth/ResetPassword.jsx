@@ -1,48 +1,64 @@
 import React, { useState } from "react";
 import "../../Styles/ResetPassword.css";
-import { Navigate, useNavigate } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
 
 const ResetPassword = () => {
   const [step, setStep] = useState(1); // 1: nhập email, 2: đặt lại mật khẩu
-  const [email, setEmail] = useState("");
+
   const [formData, setFormData] = useState({
+    email: "",
+    username: "",
     password: "",
     confirmPassword: "",
   });
-  const navigate =useNavigate();
+
   const [error, setError] = useState("");
-  const handleLogin= (e) => {
+  const navigate = useNavigate();
+
+  const handleLogin = (e) => {
     e.preventDefault();
     navigate("/login");
   };
+
+  // Hàm xử lý thay đổi các input
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  // Xử lý submit bước 1 (email + username)
   const handleEmailSubmit = (e) => {
     e.preventDefault();
-    if (!email) {
+
+    if (!formData.email) {
       setError("Email is required.");
+      return;
+    }
+    if (!formData.username) {
+      setError("Username is required.");
       return;
     }
 
     setError("");
-    console.log("Gửi email reset:", email);
-    // TODO: Gửi email lên server
-    setStep(2);
+    console.log("Gửi email reset:", formData.email, formData.username);
+    // TODO: Gửi email và username lên server để nhận link reset mật khẩu
+    setStep(2); // chuyển sang bước 2
   };
 
-  const handlePasswordChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
+  // Xử lý submit bước 2 (đặt mật khẩu mới)
   const handlePasswordSubmit = (e) => {
     e.preventDefault();
+
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match.");
       return;
     }
 
     setError("");
-    console.log("Reset with new password:", formData);
+    console.log("Reset with new password:", formData.password);
     // TODO: Gửi password mới lên server
   };
 
@@ -54,9 +70,19 @@ const ResetPassword = () => {
           <form onSubmit={handleEmailSubmit} className="reset-form">
             <input
               type="email"
+              name="email"
               placeholder="Enter your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={formData.email}
+              onChange={handleChange}
+              className="reset-input"
+              required
+            />
+            <input
+              type="text"
+              name="username"
+              placeholder="Enter your username"
+              value={formData.username}
+              onChange={handleChange}
               className="reset-input"
               required
             />
@@ -64,7 +90,7 @@ const ResetPassword = () => {
             <button type="submit" className="reset-button">
               Send Reset Link
             </button>
-            <button onClick={handleLogin} >Đăng nhập</button>
+            <button onClick={handleLogin}>Đăng nhập</button>
           </form>
         </>
       )}
@@ -78,7 +104,7 @@ const ResetPassword = () => {
               name="password"
               placeholder="New Password"
               value={formData.password}
-              onChange={handlePasswordChange}
+              onChange={handleChange}
               className="reset-input"
               required
             />
@@ -87,7 +113,7 @@ const ResetPassword = () => {
               name="confirmPassword"
               placeholder="Confirm Password"
               value={formData.confirmPassword}
-              onChange={handlePasswordChange}
+              onChange={handleChange}
               className="reset-input"
               required
             />
@@ -95,7 +121,7 @@ const ResetPassword = () => {
             <button type="submit" className="reset-button">
               Reset Password
             </button>
-            <button onClick={handleLogin} >Đăng nhập</button>
+            <button onClick={handleLogin}>Đăng nhập</button>
           </form>
         </>
       )}

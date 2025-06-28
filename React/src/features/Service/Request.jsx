@@ -1,24 +1,23 @@
 import axios from 'axios';
-// const apiClient = axios.create({
-//     baseURL: 'http://localhost:5084',
-//     headers: {
-//       'Content-Type': 'application/json',
-//     'Authorization': `Bearer ${token}`
+import { getCookie } from '../../utils/cookies';
+
+const token = getCookie("accesstoken");
+const apiClient = axios.create({
+    baseURL: 'http://localhost:8000',
+    headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
   
-//     },
-//   });
+    },
+  });
 export const LoginFormRequest = async (DataLogin) => {
     try {
-        const response = await axios.post('http://localhost:9000/api/auth/Login', DataLogin,{
-            headers: {
-                'Content-Type': 'multipart/form-data',
-              }
-        }); 
-        console.log(response.data)
+        const response = await apiClient.post('/auth/login', DataLogin); 
+        sessionStorage.setItem('access_token', response.data.access_token);
         return response.data;
     } catch (error) {
         console.error("Error adding game:", error.response || error.message);
-        return null; 
+        return error; 
     }
 }
 
@@ -33,7 +32,7 @@ export const GoogleLoginRequest = async (accessToken) => {
         const userInfo = userInfoResponse.data;
         
         // Store user info in localStorage
-        localStorage.setItem('user', JSON.stringify({
+        sessionStorage.setItem('user', JSON.stringify({
             email: userInfo.email,
             name: userInfo.name,
             picture: userInfo.picture,

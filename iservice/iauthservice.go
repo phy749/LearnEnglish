@@ -10,5 +10,4 @@ type IAuthService interface {
 	ChangePassword(req dataoject.ChangePasswordRequest) (string, error)
 	RefreshToken(req dataoject.RefreshToken) (string, error)
 	Logout(userID string) (string, error)
-	SendResetLink(email string) (string, error)
 }

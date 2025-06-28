@@ -7,14 +7,13 @@ import (
 )
 
 func SetupRouterUser(r *gin.Engine, userController *controller.UserController) *gin.Engine {
-
-	user := r.Group("/users", middleware.AuthMiddleware())
+	userProtected := r.Group("/users", middleware.AuthMiddleware())
 	{
-		user.GET("/GetAllUser", userController.GetAllUser)
-		user.POST("/CreateUser", userController.CreateUser)
-		user.PUT("/UpdateImformationUser", userController.UpdateUser)
-		user.GET("/GetUserById/:id", middleware.RoleMiddleware(1), userController.FindUserById)
-		user.PUT("/deactivate/:id", userController.DeactivateUser)
+		userProtected.GET("/GetAllUser", userController.GetAllUser)
+		userProtected.POST("/CreateUser", userController.CreateUser)
+		userProtected.PUT("/UpdateImformationUser", userController.UpdateUser)
+		userProtected.GET("/GetUserById/:id", middleware.RoleMiddleware(1), userController.FindUserById)
+		userProtected.PUT("/deactivate/:id", userController.DeactivateUser)
 	}
 
 	return r

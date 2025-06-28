@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import "../../Styles/FormLogin.css";
+import "../../Styles/FormLogin.css"; // Bạn có thể đổi tên file này thành FormRegister.css nếu muốn
 import { LoginFormRequest, GoogleLoginRequest } from "../Service/Request";
 import Toast from "../../Components/Toast";
 import { useGoogleLogin } from '@react-oauth/google';
+import { FaEye, FaEyeSlash ,FaUser} from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
 const LoginForm = () => {
+  const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -20,11 +22,11 @@ const LoginForm = () => {
 
   const showToast = (message, type = "error") => {
     setToast({ message, type, visible: true });
-    setTimeout(() => setToast({ ...toast, visible: false }), 3000);
+    setTimeout(() => setToast((prev) => ({ ...prev, visible: false })), 3000);
   };
 
   const handleChange = (e) => {
-    setFormData((prev) => ({  
+    setFormData((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
     }));
@@ -40,14 +42,9 @@ const LoginForm = () => {
     if (!/[a-z]/.test(password)) {
       return "Mật khẩu phải có ít nhất một chữ thường.";
     }
-    if (!/[A-Z]/.test(password)) {
-      return "Mật khẩu phải có ít nhất một chữ in hoa.";
-    }
+   
     if (!/[0-9]/.test(password)) {
       return "Mật khẩu phải có ít nhất một số.";
-    }
-    if (!/[^A-Za-z0-9]/.test(password)) {
-      return "Mật khẩu phải có ít nhất một ký tự đặc biệt.";
     }
     return null;
   };
@@ -58,22 +55,23 @@ const LoginForm = () => {
     try {
       const { username, password } = formData;
       const validationError = validateForm(username, password);
-      
+
       if (validationError) {
         showToast(validationError, "error");
+        setIsLoading(false);
         return;
       }
-
       const response = await LoginFormRequest(formData);
       if (response) {
-        showToast("Đăng nhập thành công", "success");
-        navigate("/dashboard"); 
+        localStorage.setItem('access_token', response.access_token);
+        showToast(response.message || "Đăng nhập thành công", "success");
+        navigate("/dashboard");
       } else {
         showToast("Đăng nhập thất bại", "error");
       }
     } catch (error) {
       console.error("Login error:", error);
-      showToast(error.message || "Có lỗi xảy ra khi đăng nhập", "error");
+      showToast("Có lỗi xảy ra khi đăng nhập", "error");
     } finally {
       setIsLoading(false);
     }
@@ -102,55 +100,78 @@ const LoginForm = () => {
     },
     onError: () => {
       showToast("Đăng nhập với Google thất bại", "error");
-    }
+    },
   });
 
   return (
-    <div className="container">
-      <form onSubmit={handleSubmit} className="form">
+    <div className="register-container">
+      <form onSubmit={handleSubmit} className="register-form">
         <h2>Đăng nhập</h2>
+        <div className="password-wrapper">
+          <input
+            type="text"
+            name="username"
+            placeholder="Tên đăng nhập"
+            value={formData.username}
+            onChange={handleChange}
+            disabled={isLoading}
+            autoComplete="username"
+          />
+          <span className="toggle-password">
+            <FaUser />
+          </span>
+        </div>
 
-        <input
-          type="text"
-          name="username"
-          placeholder="Tên đăng nhập"
-          value={formData.username}
-          onChange={handleChange}
-          className="input"
-          disabled={isLoading}
-          autoComplete="username"
-        />
+        <div className="password-wrapper">
+          <input
+            type={showPassword ? "text" : "password"}
+            name="password"
+            placeholder="Mật khẩu"
+            value={formData.password}
+            onChange={handleChange}
+            disabled={isLoading}
+            autoComplete="current-password"
+          />
+          <span
+            className="toggle-password"
+            onClick={() => setShowPassword((prev) => !prev)}
+          >
+            {showPassword ? <FaEyeSlash /> : <FaEye />}
+          </span>
+        </div>
+        <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "15px", marginTop: "15px" }}>
+          <a
+            href="#!"
+            onClick={handleRegister}
+            style={{ color: "#4a90e2", cursor: "pointer" }}
+          >
+            Bạn chưa có tài khoản?
+          </a>
+          <a
+            href="#!"
+            onClick={handleForgotPassword}
+            style={{ color: "#4a90e2", cursor: "pointer" }}
+          >
+            Quên mật khẩu
+          </a>
+        </div>
 
-        <input
-          type="password"
-          name="password"
-          placeholder="Mật khẩu"
-          value={formData.password}
-          onChange={handleChange}
-          className="input"
-          disabled={isLoading}
-          autoComplete="current-password"
-        />
-        <a onClick={handleForgotPassword}>Quên mật khẩu</a>
-
-        <button type="submit" className="button" disabled={isLoading}>
+        <button type="submit" disabled={isLoading}>
           {isLoading ? "Đang xử lý..." : "Đăng nhập"}
         </button>
-        <button onClick={handleRegister} type="button" className="button">
-          Đăng ký
-        </button>
-        {/* <button onClick={handleForgotPassword} type="button" className="button">
-          Quên mật khẩu
-        </button> */}
-        <button onClick={() => login()} type="button" className="button">
-          Đăng nhập với Google
+       
+
+        <button onClick={() => login()} type="button" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px',   }}>
+          <img src="/src/Image/th.jpg" alt="Google" style={{ width: '25px', height: '25px' }} />
+          Tiếp tục với Google
         </button>
       </form>
+
       {toast.visible && (
         <Toast
           messages={toast.message}
           type={toast.type}
-          onClose={() => setToast({ ...toast, visible: false })}
+          onClose={() => setToast((prev) => ({ ...prev, visible: false }))}
         />
       )}
     </div>

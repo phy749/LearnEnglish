@@ -43,7 +43,7 @@ func (uc *UserController) CreateUser(c *gin.Context) {
 }
 
 func (uc *UserController) UpdateUser(c *gin.Context) {
-	var req dataoject.User
+	var req dataoject.UpdateImformationUser
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -53,7 +53,9 @@ func (uc *UserController) UpdateUser(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, user)
+	c.JSON(http.StatusOK, gin.H{
+		"message": user,
+	})
 }
 
 func (uc *UserController) DeactivateUser(c *gin.Context) {
@@ -68,7 +70,9 @@ func (uc *UserController) DeactivateUser(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, user)
+	c.JSON(http.StatusOK, gin.H{
+		"Message ": user,
+	})
 }
 
 func (uc *UserController) FindUserById(c *gin.Context) {

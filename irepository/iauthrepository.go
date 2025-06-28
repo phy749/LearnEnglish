@@ -6,7 +6,7 @@ import (
 )
 
 type IAuthRepository interface {
-	Register(user dataoject.Register) (dataoject.Register, error)
+	Register(user model.Useraccount) (dataoject.Register, error)
 	FindUserByUsername(username string) (model.Useraccount, error)
 	FindUserById(user_id int) (model.Useraccount, error)
 	FindUserByEmail(email string) (model.Useraccount, error)

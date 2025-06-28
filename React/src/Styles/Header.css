@@ -1,0 +1,73 @@
+.custom-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #001529;
+  padding: 20px 60px; /* Tăng padding */
+  color: white;
+  position: relative;
+  height: 90px; /* Tăng chiều cao */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.logo-image {
+  height: 60px; /* Tăng kích thước logo */
+  cursor: pointer;
+}
+
+.site-title {
+  margin: 0;
+  font-size: 28px; /* Tăng kích thước tiêu đề */
+  font-weight: bold;
+  color: white;
+  letter-spacing: 1px;
+}
+
+.header-left,
+.header-center,
+.header-right {
+  display: flex;
+  align-items: center;
+}
+
+.header-center {
+  flex: 1;
+  justify-content: center;
+}
+
+.account-icon {
+  font-size: 34px; /* Tăng kích thước icon */
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.account-icon:hover {
+  color: #1890ff;
+}
+
+.account-dropdown {
+  position: relative;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 50px;
+  right: 0;
+  background-color: white;
+  color: black;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  min-width: 200px;
+  z-index: 1000;
+  overflow: hidden;
+}
+
+.dropdown-menu div {
+  padding: 12px 18px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.dropdown-menu div:hover {
+  background-color: #f0f0f0;
+}
